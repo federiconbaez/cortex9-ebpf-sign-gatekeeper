@@ -1,8 +1,14 @@
 name: enforce
 
-# Real bpf(BPF_PROG_LOAD). Fails the job if CAP_BPF / load is unavailable —
-# never a silent skip. The userspace gate itself is covered by ci.yml and
-# does not need this job.
+# Real bpf(BPF_PROG_LOAD) as root via sudo (same approach as
+# cortex9-iouring-abuse-sensor). GitHub-hosted runners grant passwordless sudo;
+# as a plain user the load fails with EPERM (run 40815114185). If a runner
+# ever refuses the load as root, this job MUST go red (non-zero exit), never a
+# silent skip. The userspace gate itself is covered by ci.yml.
+#
+# The gate is a userspace tool: it does not attach a BPF-LSM program, so its
+# deny path does not depend on BPF-LSM being active. The LSM step below only
+# records whether an in-kernel gate (Hornet / BPF-LSM) *could* run here.
 
 on:
   push:
@@ -12,48 +18,65 @@ on:
 
 jobs:
   bpf-load:
-    name: bpf(BPF_PROG_LOAD) positive + gate deny
+    name: bpf(BPF_PROG_LOAD) as root — control + deny + valid load
     runs-on: ubuntu-latest
-    # GitHub-hosted runners are privileged enough for CAP_BPF on recent
-    # kernels; if that ever changes, this job must go red, not yellow.
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: stable
-      - name: show bpf capability
+      - name: build release binary (as runner user)
+        run: cargo build --release --quiet
+      - name: host capability + LSM state
         run: |
           set -euo pipefail
           uname -a
-          echo "unprivileged_bpf_disabled=$(cat /proc/sys/kernel/unprivileged_bpf_disabled)"
-          # Fail loudly if we cannot even open the bpf syscall with a nonsense attr.
-          # A soft skip here would hide a broken enforce path.
-          if [ "$(cat /proc/sys/kernel/unprivileged_bpf_disabled)" = "1" ] && [ "$(id -u)" != "0" ]; then
-            echo "ENFORCE_UNAVAILABLE: unprivileged_bpf_disabled=1 and not root" >&2
-            exit 1
-          fi
-      - name: positive control — lying object loads WITHOUT the gate
-        # l02 uses bpf_send_signal (helper 109) which a kprobe is allowed to call.
-        # Proves the kernel would have accepted what the gate refused.
+          echo "id=$(id -u) unprivileged_bpf_disabled=$(cat /proc/sys/kernel/unprivileged_bpf_disabled)"
+          sudo -n true || { echo "ENFORCE_UNAVAILABLE: no passwordless sudo" >&2; exit 1; }
+          LSM="$(sudo cat /sys/kernel/security/lsm)"
+          echo "active LSMs: ${LSM}"
+          CFG="/boot/config-$(uname -r)"
+          if [ -r "$CFG" ]; then grep -E '^(# )?CONFIG_BPF_LSM' "$CFG" || echo "CONFIG_BPF_LSM not present in $CFG"; else echo "no $CFG"; fi
+          case ",${LSM}," in
+            *,bpf,*) echo "BPF_LSM_ACTIVE=yes" ;;
+            *)       echo "BPF_LSM_ACTIVE=no (an in-kernel BPF-LSM gate would load but never be called on this runner)" ;;
+          esac
+          {
+            echo "### LSM state"
+            echo "- kernel: \`$(uname -r)\`"
+            echo "- /sys/kernel/security/lsm: \`${LSM}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: "1/3 positive control: lying object loads as root WITHOUT the gate"
+        # l02 uses bpf_send_signal (helper 109), legal for kprobe programs.
+        # Proves the kernel itself would accept what the gate refuses.
         run: |
           set -euo pipefail
-          cargo run --quiet -- enforce-probe \
+          sudo ./target/release/ebpf-sign-gatekeeper enforce-probe \
             --object fixtures/bpf-obj/l02_kprobe_hidden_signal.o \
             --section kprobe/do_nanosleep \
-            --prog-type kprobe
-      - name: gate denies the same lying object (no load attempted)
+            --prog-type kprobe | tee probe.out
+          grep -q '^ENFORCE_PROBE_OK ' probe.out
+      - name: "2/3 deny: unsigned and lying cases denied as root with --load (exit 1, no load)"
         run: |
           set -euo pipefail
-          if cargo run --quiet -- check \
-              --dir fixtures/cases/l02_kprobe_hidden_signal \
-              --trust fixtures/keys; then
-            echo "gate unexpectedly allowed a lying manifest" >&2
-            exit 1
-          fi
-      - name: gate allows a valid object AND loads it
+          for c in u01_unsigned l02_kprobe_hidden_signal t03_wrong_key; do
+            set +e
+            sudo ./target/release/ebpf-sign-gatekeeper check \
+              --dir "fixtures/cases/$c" --trust fixtures/keys --load
+            rc=$?
+            set -e
+            echo "$c exit=$rc"
+            # 1 = DENY before any bpf() call; 0 = loaded (bad); 3 = load attempted (bad)
+            if [ "$rc" != "1" ]; then
+              echo "gate did not deny $c (exit $rc)" >&2
+              exit 1
+            fi
+          done
+      - name: "3/3 valid: signed object allowed AND loaded by the kernel as root"
         run: |
           set -euo pipefail
-          cargo run --quiet -- check \
+          sudo ./target/release/ebpf-sign-gatekeeper check \
             --dir fixtures/cases/v01_xdp_pass \
             --trust fixtures/keys \
-            --load
+            --load | tee load.out
+          grep -q '^ALLOW+LOAD sections=xdp:' load.out
