@@ -1,0 +1,15 @@
+{
+  "name": "v09_sock_ktime",
+  "programs": [
+    {
+      "section": "socket",
+      "prog_type": "socket_filter",
+      "helpers": [
+        5
+      ]
+    }
+  ],
+  "maps": [],
+  "kfuncs": [],
+  "globals": []
+}

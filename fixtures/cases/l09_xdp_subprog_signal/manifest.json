@@ -1,0 +1,13 @@
+{
+  "name": "l09_xdp_subprog_signal",
+  "programs": [
+    {
+      "section": "xdp",
+      "prog_type": "xdp",
+      "helpers": []
+    }
+  ],
+  "maps": [],
+  "kfuncs": [],
+  "globals": []
+}

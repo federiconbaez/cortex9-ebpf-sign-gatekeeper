@@ -1,0 +1,59 @@
+name: enforce
+
+# Real bpf(BPF_PROG_LOAD). Fails the job if CAP_BPF / load is unavailable —
+# never a silent skip. The userspace gate itself is covered by ci.yml and
+# does not need this job.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  bpf-load:
+    name: bpf(BPF_PROG_LOAD) positive + gate deny
+    runs-on: ubuntu-latest
+    # GitHub-hosted runners are privileged enough for CAP_BPF on recent
+    # kernels; if that ever changes, this job must go red, not yellow.
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: stable
+      - name: show bpf capability
+        run: |
+          set -euo pipefail
+          uname -a
+          echo "unprivileged_bpf_disabled=$(cat /proc/sys/kernel/unprivileged_bpf_disabled)"
+          # Fail loudly if we cannot even open the bpf syscall with a nonsense attr.
+          # A soft skip here would hide a broken enforce path.
+          if [ "$(cat /proc/sys/kernel/unprivileged_bpf_disabled)" = "1" ] && [ "$(id -u)" != "0" ]; then
+            echo "ENFORCE_UNAVAILABLE: unprivileged_bpf_disabled=1 and not root" >&2
+            exit 1
+          fi
+      - name: positive control — lying object loads WITHOUT the gate
+        # l02 uses bpf_send_signal (helper 109) which a kprobe is allowed to call.
+        # Proves the kernel would have accepted what the gate refused.
+        run: |
+          set -euo pipefail
+          cargo run --quiet -- enforce-probe \
+            --object fixtures/bpf-obj/l02_kprobe_hidden_signal.o \
+            --section kprobe/do_nanosleep \
+            --prog-type kprobe
+      - name: gate denies the same lying object (no load attempted)
+        run: |
+          set -euo pipefail
+          if cargo run --quiet -- check \
+              --dir fixtures/cases/l02_kprobe_hidden_signal \
+              --trust fixtures/keys; then
+            echo "gate unexpectedly allowed a lying manifest" >&2
+            exit 1
+          fi
+      - name: gate allows a valid object AND loads it
+        run: |
+          set -euo pipefail
+          cargo run --quiet -- check \
+            --dir fixtures/cases/v01_xdp_pass \
+            --trust fixtures/keys \
+            --load

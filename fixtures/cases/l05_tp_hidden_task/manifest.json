@@ -1,0 +1,13 @@
+{
+  "name": "l05_tp_hidden_task",
+  "programs": [
+    {
+      "section": "tracepoint/sched/sched_switch",
+      "prog_type": "tracepoint",
+      "helpers": []
+    }
+  ],
+  "maps": [],
+  "kfuncs": [],
+  "globals": []
+}

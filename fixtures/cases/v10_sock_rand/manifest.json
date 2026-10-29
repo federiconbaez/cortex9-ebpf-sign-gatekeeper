@@ -1,0 +1,15 @@
+{
+  "name": "v10_sock_rand",
+  "programs": [
+    {
+      "section": "socket",
+      "prog_type": "socket_filter",
+      "helpers": [
+        7
+      ]
+    }
+  ],
+  "maps": [],
+  "kfuncs": [],
+  "globals": []
+}

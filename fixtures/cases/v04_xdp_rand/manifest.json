@@ -1,0 +1,15 @@
+{
+  "name": "v04_xdp_rand",
+  "programs": [
+    {
+      "section": "xdp",
+      "prog_type": "xdp",
+      "helpers": [
+        7
+      ]
+    }
+  ],
+  "maps": [],
+  "kfuncs": [],
+  "globals": []
+}

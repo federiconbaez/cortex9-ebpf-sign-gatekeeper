@@ -1,0 +1,13 @@
+{
+  "name": "v07_sock_zero",
+  "programs": [
+    {
+      "section": "socket",
+      "prog_type": "socket_filter",
+      "helpers": []
+    }
+  ],
+  "maps": [],
+  "kfuncs": [],
+  "globals": []
+}

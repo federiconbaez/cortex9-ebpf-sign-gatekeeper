@@ -1,0 +1,13 @@
+{
+  "name": "l04_kprobe_hidden_write_user",
+  "programs": [
+    {
+      "section": "kprobe/do_nanosleep",
+      "prog_type": "kprobe",
+      "helpers": []
+    }
+  ],
+  "maps": [],
+  "kfuncs": [],
+  "globals": []
+}

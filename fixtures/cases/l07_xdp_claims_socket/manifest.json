@@ -1,0 +1,13 @@
+{
+  "name": "l07_xdp_claims_socket",
+  "programs": [
+    {
+      "section": "xdp",
+      "prog_type": "socket_filter",
+      "helpers": []
+    }
+  ],
+  "maps": [],
+  "kfuncs": [],
+  "globals": []
+}

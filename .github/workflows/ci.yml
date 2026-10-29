@@ -1,0 +1,29 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  unit:
+    name: fmt + clippy + test + medición
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: stable
+          components: clippy, rustfmt
+      - name: kernel
+        run: uname -a && cat /proc/sys/kernel/unprivileged_bpf_disabled || true
+      - name: fmt
+        run: cargo fmt --all -- --check
+      - name: clippy
+        run: cargo clippy --all-targets -- -D warnings
+      - name: test
+        run: cargo test --workspace
+      - name: corpus (acceptance)
+        run: cargo run --quiet -- corpus
+      - name: reproducir medición
+        run: cargo run --quiet -- measure --iters 200

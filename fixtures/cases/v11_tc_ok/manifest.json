@@ -1,0 +1,13 @@
+{
+  "name": "v11_tc_ok",
+  "programs": [
+    {
+      "section": "tc",
+      "prog_type": "sched_cls",
+      "helpers": []
+    }
+  ],
+  "maps": [],
+  "kfuncs": [],
+  "globals": []
+}

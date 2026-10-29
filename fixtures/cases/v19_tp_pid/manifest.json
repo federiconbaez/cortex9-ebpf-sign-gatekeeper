@@ -1,0 +1,15 @@
+{
+  "name": "v19_tp_pid",
+  "programs": [
+    {
+      "section": "tracepoint/syscalls/sys_enter_nanosleep",
+      "prog_type": "tracepoint",
+      "helpers": [
+        14
+      ]
+    }
+  ],
+  "maps": [],
+  "kfuncs": [],
+  "globals": []
+}

@@ -1,0 +1,13 @@
+{
+  "name": "v02_xdp_drop",
+  "programs": [
+    {
+      "section": "xdp",
+      "prog_type": "xdp",
+      "helpers": []
+    }
+  ],
+  "maps": [],
+  "kfuncs": [],
+  "globals": []
+}

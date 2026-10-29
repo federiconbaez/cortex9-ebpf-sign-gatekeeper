@@ -1,0 +1,13 @@
+{
+  "name": "v12_tc_shot",
+  "programs": [
+    {
+      "section": "tc",
+      "prog_type": "sched_cls",
+      "helpers": []
+    }
+  ],
+  "maps": [],
+  "kfuncs": [],
+  "globals": []
+}

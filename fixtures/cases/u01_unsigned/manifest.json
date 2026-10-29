@@ -1,0 +1,13 @@
+{
+  "name": "v01_xdp_pass",
+  "programs": [
+    {
+      "section": "xdp",
+      "prog_type": "xdp",
+      "helpers": []
+    }
+  ],
+  "maps": [],
+  "kfuncs": [],
+  "globals": []
+}

@@ -1,0 +1,264 @@
+[
+  {
+    "expect": "allow",
+    "id": "v01_xdp_pass",
+    "kind": "valid"
+  },
+  {
+    "expect": "allow",
+    "id": "v02_xdp_drop",
+    "kind": "valid"
+  },
+  {
+    "expect": "allow",
+    "id": "v03_xdp_ktime",
+    "kind": "valid"
+  },
+  {
+    "expect": "allow",
+    "id": "v04_xdp_rand",
+    "kind": "valid"
+  },
+  {
+    "expect": "allow",
+    "id": "v05_xdp_cpu",
+    "kind": "valid"
+  },
+  {
+    "expect": "allow",
+    "id": "v06_xdp_two",
+    "kind": "valid"
+  },
+  {
+    "expect": "allow",
+    "id": "v07_sock_zero",
+    "kind": "valid"
+  },
+  {
+    "expect": "allow",
+    "id": "v08_sock_all",
+    "kind": "valid"
+  },
+  {
+    "expect": "allow",
+    "id": "v09_sock_ktime",
+    "kind": "valid"
+  },
+  {
+    "expect": "allow",
+    "id": "v10_sock_rand",
+    "kind": "valid"
+  },
+  {
+    "expect": "allow",
+    "id": "v11_tc_ok",
+    "kind": "valid"
+  },
+  {
+    "expect": "allow",
+    "id": "v12_tc_shot",
+    "kind": "valid"
+  },
+  {
+    "expect": "allow",
+    "id": "v13_tc_cpu",
+    "kind": "valid"
+  },
+  {
+    "expect": "allow",
+    "id": "v14_tc_rand",
+    "kind": "valid"
+  },
+  {
+    "expect": "allow",
+    "id": "v15_kprobe_pid",
+    "kind": "valid"
+  },
+  {
+    "expect": "allow",
+    "id": "v16_kprobe_uid",
+    "kind": "valid"
+  },
+  {
+    "expect": "allow",
+    "id": "v17_kprobe_comm",
+    "kind": "valid"
+  },
+  {
+    "expect": "allow",
+    "id": "v18_tp_ktime",
+    "kind": "valid"
+  },
+  {
+    "expect": "allow",
+    "id": "v19_tp_pid",
+    "kind": "valid"
+  },
+  {
+    "expect": "allow",
+    "id": "v20_tp_cpu",
+    "kind": "valid"
+  },
+  {
+    "expect": {
+      "deny": {
+        "reason": "undeclared_helper"
+      }
+    },
+    "id": "l01_kprobe_hidden_probe_read",
+    "kind": "lying"
+  },
+  {
+    "expect": {
+      "deny": {
+        "reason": "undeclared_helper"
+      }
+    },
+    "id": "l02_kprobe_hidden_signal",
+    "kind": "lying"
+  },
+  {
+    "expect": {
+      "deny": {
+        "reason": "undeclared_helper"
+      }
+    },
+    "id": "l03_kprobe_hidden_override",
+    "kind": "lying"
+  },
+  {
+    "expect": {
+      "deny": {
+        "reason": "undeclared_helper"
+      }
+    },
+    "id": "l04_kprobe_hidden_write_user",
+    "kind": "lying"
+  },
+  {
+    "expect": {
+      "deny": {
+        "reason": "undeclared_helper"
+      }
+    },
+    "id": "l05_tp_hidden_task",
+    "kind": "lying"
+  },
+  {
+    "expect": {
+      "deny": {
+        "reason": "hook_mismatch"
+      }
+    },
+    "id": "l06_kprobe_claims_socket",
+    "kind": "lying"
+  },
+  {
+    "expect": {
+      "deny": {
+        "reason": "hook_mismatch"
+      }
+    },
+    "id": "l07_xdp_claims_socket",
+    "kind": "lying"
+  },
+  {
+    "expect": {
+      "deny": {
+        "reason": "undeclared_section"
+      }
+    },
+    "id": "l08_xdp_hidden_second_prog",
+    "kind": "lying"
+  },
+  {
+    "expect": {
+      "deny": {
+        "reason": "undeclared_section"
+      }
+    },
+    "id": "l09_xdp_subprog_signal",
+    "kind": "lying"
+  },
+  {
+    "expect": {
+      "deny": {
+        "reason": "undeclared_map"
+      }
+    },
+    "id": "l10_xdp_hidden_map",
+    "kind": "lying"
+  },
+  {
+    "expect": {
+      "deny": {
+        "reason": "sig_missing"
+      }
+    },
+    "id": "u01_unsigned",
+    "kind": "unsigned"
+  },
+  {
+    "expect": {
+      "deny": {
+        "reason": "sig_object_hash"
+      }
+    },
+    "id": "t01_object_bitflip",
+    "kind": "tampered"
+  },
+  {
+    "expect": {
+      "deny": {
+        "reason": "sig_manifest_hash"
+      }
+    },
+    "id": "t02_manifest_rewrite",
+    "kind": "tampered"
+  },
+  {
+    "expect": {
+      "deny": {
+        "reason": "sig_unknown_key"
+      }
+    },
+    "id": "t03_wrong_key",
+    "kind": "tampered"
+  },
+  {
+    "expect": {
+      "deny": {
+        "reason": "sig_bad"
+      }
+    },
+    "id": "t04_sig_bitflip",
+    "kind": "tampered"
+  },
+  {
+    "expect": {
+      "deny": {
+        "reason": "sig_malformed"
+      }
+    },
+    "id": "t05_sig_truncated",
+    "kind": "tampered"
+  },
+  {
+    "expect": {
+      "deny": {
+        "reason": "elf_not_bpf"
+      }
+    },
+    "id": "x01_x86_not_bpf",
+    "kind": "not_bpf"
+  },
+  {
+    "expect": {
+      "deny": {
+        "reason": "elf_malformed"
+      }
+    },
+    "id": "x02_garbage",
+    "kind": "not_bpf"
+  }
+]

@@ -1,0 +1,7 @@
+{
+  "format": "ebpf-sign-gatekeeper/stub-ed25519/v1",
+  "key_id": "3097e2dee2cb4a34",
+  "object_sha256": "724c013a854b375e51a16d2678aca38aef36ee40c42e0718f4cf28115107719a",
+  "manifest_sha256": "70f03cc9702e5737f3174b1485ac6148cdead1d63e4e9ad78e1381c0320a86b1",
+  "signature": "722934695ffc94bd62fb953c43f9f054a014dcca7c2293c8d023c76c0ae6dc8ca30f3fb9748947a058b2c1ba3b8196c421b9d41a64b99e9c9b9eeb97be8a8b01"
+}

@@ -1,0 +1,15 @@
+{
+  "name": "v18_tp_ktime",
+  "programs": [
+    {
+      "section": "tracepoint/syscalls/sys_enter_nanosleep",
+      "prog_type": "tracepoint",
+      "helpers": [
+        5
+      ]
+    }
+  ],
+  "maps": [],
+  "kfuncs": [],
+  "globals": []
+}

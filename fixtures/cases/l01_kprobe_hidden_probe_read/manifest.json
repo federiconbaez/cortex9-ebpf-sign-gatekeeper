@@ -1,0 +1,13 @@
+{
+  "name": "l01_kprobe_hidden_probe_read",
+  "programs": [
+    {
+      "section": "kprobe/do_nanosleep",
+      "prog_type": "kprobe",
+      "helpers": []
+    }
+  ],
+  "maps": [],
+  "kfuncs": [],
+  "globals": []
+}

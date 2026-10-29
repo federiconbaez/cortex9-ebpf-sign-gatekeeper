@@ -1,0 +1,15 @@
+{
+  "name": "v13_tc_cpu",
+  "programs": [
+    {
+      "section": "tc",
+      "prog_type": "sched_cls",
+      "helpers": [
+        8
+      ]
+    }
+  ],
+  "maps": [],
+  "kfuncs": [],
+  "globals": []
+}

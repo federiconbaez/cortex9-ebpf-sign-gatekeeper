@@ -1,0 +1,13 @@
+{
+  "name": "l06_kprobe_claims_socket",
+  "programs": [
+    {
+      "section": "kprobe/do_nanosleep",
+      "prog_type": "socket_filter",
+      "helpers": []
+    }
+  ],
+  "maps": [],
+  "kfuncs": [],
+  "globals": []
+}

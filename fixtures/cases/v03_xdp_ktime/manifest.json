@@ -1,0 +1,15 @@
+{
+  "name": "v03_xdp_ktime",
+  "programs": [
+    {
+      "section": "xdp",
+      "prog_type": "xdp",
+      "helpers": [
+        5
+      ]
+    }
+  ],
+  "maps": [],
+  "kfuncs": [],
+  "globals": []
+}

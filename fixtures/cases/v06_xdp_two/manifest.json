@@ -1,0 +1,16 @@
+{
+  "name": "v06_xdp_two",
+  "programs": [
+    {
+      "section": "xdp",
+      "prog_type": "xdp",
+      "helpers": [
+        5,
+        7
+      ]
+    }
+  ],
+  "maps": [],
+  "kfuncs": [],
+  "globals": []
+}

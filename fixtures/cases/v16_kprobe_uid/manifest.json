@@ -1,0 +1,15 @@
+{
+  "name": "v16_kprobe_uid",
+  "programs": [
+    {
+      "section": "kprobe/do_nanosleep",
+      "prog_type": "kprobe",
+      "helpers": [
+        15
+      ]
+    }
+  ],
+  "maps": [],
+  "kfuncs": [],
+  "globals": []
+}

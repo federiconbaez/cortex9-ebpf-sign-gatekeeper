@@ -1,0 +1,13 @@
+{
+  "name": "x01",
+  "programs": [
+    {
+      "section": ".text",
+      "prog_type": "xdp",
+      "helpers": []
+    }
+  ],
+  "maps": [],
+  "kfuncs": [],
+  "globals": []
+}

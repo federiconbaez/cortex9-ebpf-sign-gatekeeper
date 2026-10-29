@@ -1,0 +1,15 @@
+{
+  "name": "l02_kprobe_hidden_signal",
+  "programs": [
+    {
+      "section": "kprobe/do_nanosleep",
+      "prog_type": "kprobe",
+      "helpers": [
+        14
+      ]
+    }
+  ],
+  "maps": [],
+  "kfuncs": [],
+  "globals": []
+}

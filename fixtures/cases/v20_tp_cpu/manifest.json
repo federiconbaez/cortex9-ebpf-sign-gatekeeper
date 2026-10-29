@@ -1,0 +1,15 @@
+{
+  "name": "v20_tp_cpu",
+  "programs": [
+    {
+      "section": "tracepoint/sched/sched_switch",
+      "prog_type": "tracepoint",
+      "helpers": [
+        8
+      ]
+    }
+  ],
+  "maps": [],
+  "kfuncs": [],
+  "globals": []
+}

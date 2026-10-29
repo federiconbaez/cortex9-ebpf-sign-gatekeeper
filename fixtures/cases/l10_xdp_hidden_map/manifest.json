@@ -1,0 +1,15 @@
+{
+  "name": "l10_xdp_hidden_map",
+  "programs": [
+    {
+      "section": "xdp",
+      "prog_type": "xdp",
+      "helpers": [
+        1
+      ]
+    }
+  ],
+  "maps": [],
+  "kfuncs": [],
+  "globals": []
+}

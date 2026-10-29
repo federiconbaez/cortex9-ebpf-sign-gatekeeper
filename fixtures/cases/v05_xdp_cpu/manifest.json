@@ -1,0 +1,15 @@
+{
+  "name": "v05_xdp_cpu",
+  "programs": [
+    {
+      "section": "xdp",
+      "prog_type": "xdp",
+      "helpers": [
+        8
+      ]
+    }
+  ],
+  "maps": [],
+  "kfuncs": [],
+  "globals": []
+}

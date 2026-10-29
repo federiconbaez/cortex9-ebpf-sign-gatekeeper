@@ -1,0 +1,13 @@
+{
+  "name": "l08_xdp_hidden_second_prog",
+  "programs": [
+    {
+      "section": "xdp",
+      "prog_type": "xdp",
+      "helpers": []
+    }
+  ],
+  "maps": [],
+  "kfuncs": [],
+  "globals": []
+}
