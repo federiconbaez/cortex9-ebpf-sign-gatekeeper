@@ -98,12 +98,30 @@ cargo run --release --quiet -- measure --iters 500
 
 - `ci.yml` — `fmt`, `clippy -D warnings`, `cargo test`, `corpus`, `measure`.
   Needs **no** CAP_BPF. Safe on this box (`unprivileged_bpf_disabled=2`).
-- `enforce.yml` — real `bpf(BPF_PROG_LOAD)`.
-  1. Positive control: load a *lying* object **with the gate bypassed**
-     (`enforce-probe`) — proves the kernel would have accepted it.
-  2. Gate denies the same lying case (no load attempted).
-  3. Gate allows a valid case **and** loads it (`--load`).
-  If the runner cannot load BPF, the job **fails** (never a silent skip).
+- `enforce.yml` — real `bpf(BPF_PROG_LOAD)` **as root via `sudo`** (the
+  binary is built as the runner user, then run with `sudo`). As a plain user
+  the runner gets `EPERM` (run 40815114185, red); with `sudo` it loads (run
+  40820064950, green, kernel `7.0.0-1017-azure`).
+  1. Positive control: load the *lying* `l02` object **with the gate bypassed**
+     (`enforce-probe`) — the kernel accepts it (`ENFORCE_PROBE_OK`), so the
+     undeclared `bpf_send_signal` (helper 109) is not something the kernel
+     would have stopped on its own.
+  2. Deny: `u01_unsigned`, `l02_kprobe_hidden_signal` and `t03_wrong_key` run
+     as root **with `--load`** and must exit `1` (DENY before any `bpf()`
+     call); exit `0` or `3` fails the job.
+  3. Valid load: `v01_xdp_pass` must print `ALLOW+LOAD sections=xdp:…`.
+  If the runner cannot load BPF as root, the job **fails** (never a silent skip).
+
+### BPF-LSM on GitHub runners (measured)
+
+The enforce job prints the runner's LSM state. On run 40820064950:
+`CONFIG_BPF_LSM=y`, but `/sys/kernel/security/lsm` =
+`lockdown,capability,landlock,yama,apparmor,ima,evm` — **`bpf` is not in the
+active list**. A BPF-LSM program (an in-kernel gate) would load there but
+never be invoked. This repo's gate is userspace and attaches no LSM program,
+so its deny path does not depend on BPF-LSM; but an in-kernel variant could
+**not** be validated on these runners and would need a VM booted with
+`lsm=...,bpf`.
 
 ## Limits (honest)
 
